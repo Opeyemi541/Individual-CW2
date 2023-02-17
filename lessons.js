@@ -4,9 +4,8 @@ const lessons = [
         "Subject":"Math",
         "Location":"London",
         "Price":"350",
-        "Space": 10
-        ,
-        "image":"Math4-web.jpg",
+        "Space": 10,
+        "image":"./public/Math4-web.jpg",
         
     },
     {   
@@ -15,7 +14,7 @@ const lessons = [
         "Location":"Dubai",
         "Price":"360",
         "Space": 10,
-        "image":"english.jpg",
+        "image":"./public/english.jpg",
         
 
     },
@@ -25,7 +24,7 @@ const lessons = [
         "Location":"Norway",
         "Price":"250",
         "Space":10,
-        "image":"computer science.jpg",
+        "image":"./public/computer science.jpg",
         
 
     },
@@ -35,7 +34,7 @@ const lessons = [
         "Location":"India",
         "Price":"200",
         "Space":10,
-        "image":"history.jpg",
+        "image":"./public/history.jpg",
         
 
     },
@@ -45,7 +44,7 @@ const lessons = [
         "Location":"Abu Dahbi",
         "Price":"300",
         "Space":10,
-        "image":"geography.jpg",
+        "image":"./public/geography.jpg",
         
     },
     {
@@ -54,7 +53,7 @@ const lessons = [
         "Location":"New York",
         "Price":"220",
         "Space":10,
-        "image":"ss.jpg",
+        "image":"./public/ss.jpg",
         
 
     },
@@ -64,7 +63,7 @@ const lessons = [
         "Location":"London",
         "Price":"320",
         "Space":10,
-        "image":"psy.jpg",
+        "image":"./public/psy.jpg",
         
 
     },{
@@ -73,7 +72,7 @@ const lessons = [
         "Location":"Jumiera",
         "Price":"170",
         "Space":10,
-        "image":"bio.jpeg",
+        "image":"./public/bio.jpeg",
         
 
     },
@@ -83,7 +82,7 @@ const lessons = [
         "Location":"China",
         "Price":"500",
         "Space":10,
-        "image":"NP.jpg",
+        "image":"./public/NP.jpg",
         
     },
     {
@@ -92,7 +91,7 @@ const lessons = [
         "Location":"Japan",
         "Price":"510",
         "Space":10,
-        "image":"rockect sci.jpg",
+        "image":"./public/rockect sci.jpg",
         
 
     }
