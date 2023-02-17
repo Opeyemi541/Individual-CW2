@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const bodyParser = require('body-parser');
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.json());
 
 //logger middleware that output all requests to the server console
 app.use((req, res, next) => {
@@ -26,9 +28,37 @@ app.use((req, res, next) => {
 const MongoClient = require('mongodb').MongoClient;
 let db;
 
-MongoClient.connect('mongodb+srv://Yusuf:12345@cluster0.iiaahgn.mongodb.net/?retryWrites=true&w=majority', (err, client)=> {
-    db = client.db('Lessons');
-})
+// MongoClient.connect('mongodb+srv://Yusuf:12345@cluster0.iiaahgn.mongodb.net/?retryWrites=true&w=majority', (err, client)=> {
+//     db = client.db('Lessons');
+//     lessonCollection = db.collection("Lesson Information");
+//     orderCollection = db.collection("Order");
+// });
+const url = 'mongodb+srv://Yusuf:12345@cluster0.iiaahgn.mongodb.net';
+const client = new MongoClient(url);
+
+async function run() {
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+
+    // Access a database and collection
+    const database = client.db('Lessons');
+    const collection = database.collection('Order');
+    
+
+    // Perform database operations
+    const result = await collection.insertOne({ name: 'example' });
+    console.log(result);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    // Close the client
+    await client.close();
+   }
+}
+
+run().catch(console.error);
+
 
 //display a message for root path to show that API is workig
 app.get('/', (req, res, next)=>{
@@ -50,21 +80,34 @@ app.get("/lessons", (req, res) => {
 });
   
 // POST Route to save new order
-app.post("/orders", (req, res) => {
-  const newOrder = req.body;
-  orders.push(newOrder);
-  res.json(orders);
+app.post('/orders', async (req, res) => {
+  try {
+    // Connect to the MongoDB database
+    await client.connect();
+    const db = client.db('Lessons');
+    const collection = db.collection('Order');
+
+    // Insert a new document into the collection
+    const result = await collection.insertOne(req.body);
+    res.status(201).json({ message: 'Order created successfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: 'Server error' });
+  } finally {
+    // Close the database connection
+    await client.close();
+  }
 });
   
   // PUT Route to update number of available spaces in lesson
-  app.put("/lessons/:subject/:location", (req, res) => {
+  app.put("/lessons/:Subject/:Location", (req, res) => {
     const { subject, location } = req.params;
     const updatedLesson = lessons.find(
-      lesson => lesson.subject === subject && lesson.location === location
+      lessons => lessons.Subject === subject && lessons.Location === location
     );
   
     if (updatedLesson) {
-      updatedLesson.availableSpaces -= 1;
+      updatedLesson.Space -= 1;
       res.json(updatedLesson);
     } else {
       res.status(404).send("Lesson not found");
@@ -72,16 +115,23 @@ app.post("/orders", (req, res) => {
   });
 
   //search    
-    app.get('/search', (req, res) => {
-      const query = req.query.q; 
-      
-      // perform the search using MongoDB
-      const searchResults = lessons.filter((lessons) =>
-    lessons.id.toLowerCase().includes(query.toLowerCase())
-  );
+  app.get("/search", (req, res) => {
+    let search_keyword = req.query.search;
+    req.Lessons.find({}).toArray((err, results) => {
+      if (err) return next(err);
+      let filteredList = results.filter((subject) => {
+        return (
+          subject.subjectname
+            .toLowerCase()
+            .match(search_keyword.toLowerCase()) ||
+          subject.location.toLowerCase().match(search_keyword.toLowerCase())
+        );
+      });
+      res.send(filteredList);
+    });
+  });
 
-  res.json(searchResults);
-});
+
   
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
